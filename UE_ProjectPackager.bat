@@ -58,8 +58,8 @@ if "%NEEDS_CONFIG%"=="true" (
     :get_engine_path
     echo Engine Path Configuration:
     echo ----------------------------------------
-    if not "%ENGINE%"=="" (
-        echo Current: %ENGINE% [INVALID]
+    if not "!ENGINE!"=="" (
+        echo Current: !ENGINE! [INVALID]
     )
     echo Example: C:\Engines\UnrealEngine\UE_5.6
     echo          C:\Program Files\Epic Games\UE_5.4
@@ -67,37 +67,37 @@ if "%NEEDS_CONFIG%"=="true" (
     set /p "NEW_ENGINE=Enter your Unreal Engine installation path: "
     
     REM Validate engine path
-    if "%NEW_ENGINE%"=="" (
+    if "!NEW_ENGINE!"=="" (
         echo Error: Engine path cannot be empty.
         goto :get_engine_path
     )
     
-    if not exist "%NEW_ENGINE%" (
-        echo Error: Path does not exist: %NEW_ENGINE%
+    if not exist "!NEW_ENGINE!" (
+        echo Error: Path does not exist: !NEW_ENGINE!
         echo Please enter a valid path to your Unreal Engine installation.
         goto :get_engine_path
     )
     
     REM Check for UnrealBuildTool
-    if not exist "%NEW_ENGINE%\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe" (
+    if not exist "!NEW_ENGINE!\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe" (
         echo Error: This doesn't appear to be a valid Unreal Engine installation.
         echo Could not find UnrealBuildTool.exe at:
-        echo %NEW_ENGINE%\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
+        echo !NEW_ENGINE!\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
         echo.
         echo Please verify you've entered the correct Unreal Engine root directory.
         goto :get_engine_path
     )
     
-    set "ENGINE=%NEW_ENGINE%"
-    echo Engine path validated: %ENGINE%
+    set "ENGINE=!NEW_ENGINE!"
+    echo Engine path validated: !ENGINE!
     echo.
     
     REM Get Project Base Path
     :get_project_path
     echo Project Directory Configuration:
     echo ----------------------------------------
-    if not "%PROJECT_BASE%"=="" (
-        echo Current: %PROJECT_BASE% [INVALID]
+    if not "!PROJECT_BASE!"=="" (
+        echo Current: !PROJECT_BASE! [INVALID]
     )
     echo Example: C:\GameDevProjects\UnrealProjects
     echo          D:\MyProjects\Unreal
@@ -108,35 +108,35 @@ if "%NEEDS_CONFIG%"=="true" (
     set /p "NEW_PROJECT_BASE=Enter your projects base directory: "
     
     REM Validate project base path
-    if "%NEW_PROJECT_BASE%"=="" (
+    if "!NEW_PROJECT_BASE!"=="" (
         echo Error: Project base path cannot be empty.
         goto :get_project_path
     )
     
-    if not exist "%NEW_PROJECT_BASE%" (
-        echo Error: Directory does not exist: %NEW_PROJECT_BASE%
+    if not exist "!NEW_PROJECT_BASE!" (
+        echo Error: Directory does not exist: !NEW_PROJECT_BASE!
         echo.
         set /p CREATE_DIR="Would you like to create this directory? (Y/n): "
         if /i "!CREATE_DIR!"=="n" goto :get_project_path
         
-        mkdir "%NEW_PROJECT_BASE%" 2>nul
+        mkdir "!NEW_PROJECT_BASE!" 2>nul
         if !errorlevel! neq 0 (
-            echo Error: Failed to create directory: %NEW_PROJECT_BASE%
+            echo Error: Failed to create directory: !NEW_PROJECT_BASE!
             echo Please check permissions or enter a different path.
             goto :get_project_path
         )
-        echo Directory created: %NEW_PROJECT_BASE%
+        echo Directory created: !NEW_PROJECT_BASE!
     )
     
-    set "PROJECT_BASE=%NEW_PROJECT_BASE%"
-    echo Project base directory set: %PROJECT_BASE%
+    set "PROJECT_BASE=!NEW_PROJECT_BASE!"
+    echo Project base directory set: !PROJECT_BASE!
     echo.
     
     REM Save configuration
     echo Saving configuration...
     (
-        echo ENGINE=%ENGINE%
-        echo PROJECT_BASE=%PROJECT_BASE%
+        echo ENGINE=!ENGINE!
+        echo PROJECT_BASE=!PROJECT_BASE!
     ) > "%CONFIG_FILE%"
     
     if exist "%CONFIG_FILE%" (
@@ -145,8 +145,8 @@ if "%NEEDS_CONFIG%"=="true" (
         echo ========================================
         echo SETUP COMPLETE
         echo ========================================
-        echo Engine: %ENGINE%
-        echo Projects: %PROJECT_BASE%
+        echo Engine: !ENGINE!
+        echo Projects: !PROJECT_BASE!
         echo.
         echo Configuration will be automatically loaded on future runs.
         echo To reconfigure paths, delete: %CONFIG_FILE%
